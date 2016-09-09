@@ -12,7 +12,7 @@ use opengl_graphics::GlGraphics;
 use graphics::color::{BLACK, WHITE};
 use graphics::types::Color;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 enum TileType {
     Mine,
     Blank
@@ -62,12 +62,16 @@ impl App {
         use rand::{thread_rng, Rng};
 
         let mut rng = thread_rng();
-        let tile_choices = [TileType::Mine, TileType::Blank];
+        let num_mines = 5;
 
         let mut minefield = [[Tile { tile_type: TileType::Blank, hidden: true }; 5]; 5];
-        for row in minefield.iter_mut() {
-            for tile in row.iter_mut() {
-                tile.tile_type = *rng.choose(&tile_choices).unwrap();
+        let mut mines_added = 0;
+        while mines_added < num_mines {
+            let (r, c) = (rng.gen_range(0, minefield.len()),
+                          rng.gen_range(0, minefield[0].len()));
+            if minefield[r][c].tile_type == TileType::Blank { 
+                minefield[r][c].tile_type = TileType::Mine;
+                mines_added += 1;
             }
         }
          
@@ -139,7 +143,7 @@ pub fn sweep_mines() {
     let mut app = App::new(opengl);
 
     while !window.should_close() {
-	    handle_window_events(&mut window, &mut app);
+        handle_window_events(&mut window, &mut app);
     }
 }
 

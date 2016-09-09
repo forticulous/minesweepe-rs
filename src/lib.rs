@@ -62,14 +62,12 @@ impl App {
         use rand::{thread_rng, Rng};
 
         let mut rng = thread_rng();
+        let tile_choices = [TileType::Mine, TileType::Blank];
 
         let mut minefield = [[Tile { tile_type: TileType::Blank, hidden: true }; 5]; 5];
         for row in minefield.iter_mut() {
             for tile in row.iter_mut() {
-                tile.tile_type = match rng.gen_range(0, 2) {
-                    0 => TileType::Mine,
-                    _ => TileType::Blank
-                } 
+                tile.tile_type = *rng.choose(&tile_choices).unwrap();
             }
         }
          

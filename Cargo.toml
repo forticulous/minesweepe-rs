@@ -1,0 +1,11 @@
+[package]
+name = "minesweeper_rust"
+version = "0.1.0"
+authors = ["fort <fort@tmail.com>"]
+
+[dependencies]
+piston = "0.25.0"
+pistoncore-glfw_window = "0.25.0"
+piston2d-graphics = "0.17.0"
+piston2d-opengl_graphics = "0.33.0"
+rand = "0.3.14"

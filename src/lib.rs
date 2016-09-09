@@ -69,8 +69,9 @@ impl App {
         while mines_added < num_mines {
             let (r, c) = (rng.gen_range(0, minefield.len()),
                           rng.gen_range(0, minefield[0].len()));
-            if minefield[r][c].tile_type == TileType::Blank { 
-                minefield[r][c].tile_type = TileType::Mine;
+            let tile = &mut minefield[r][c];
+            if tile.tile_type == TileType::Blank { 
+                tile.tile_type = TileType::Mine;
                 mines_added += 1;
             }
         }

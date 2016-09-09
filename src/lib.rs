@@ -130,7 +130,7 @@ impl App {
 pub fn sweep_mines() {
     let opengl = OpenGL::V4_1;
 
-    let mut window: GlfwWindow = WindowSettings::new("spinning-square", (400, 400))
+    let mut window: GlfwWindow = WindowSettings::new("minesweepe-rs", (400, 400))
         .fullscreen(false)
         .vsync(true)
         .opengl(opengl)

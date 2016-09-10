@@ -32,7 +32,12 @@ impl App {
         let mut rng = thread_rng();
         let num_mines = 5;
 
-        let mut minefield = [[Tile { tile_type: TileType::Blank, hidden: true, adjacent_mines: 0 }; 5]; 5];
+        let mut minefield = [[Tile { 
+            tile_type: TileType::Blank, 
+            hidden: true, 
+            marked: false,
+            adjacent_mines: 0 
+        }; 5]; 5];
         let (max_r, max_c) = (minefield.len(), minefield[0].len());
         let mut mines_added = 0;
         while mines_added < num_mines {
@@ -109,9 +114,12 @@ impl App {
         if *button == Button::Mouse(MouseButton::Left) {
             self.handle_click();
         }
+        if *button == Button::Mouse(MouseButton::Right) {
+            self.handle_mark();
+        }
     }
 
-    pub fn handle_click(&mut self) {
+    fn find_tile(&mut self) -> (usize, usize) {
         let (cols, rows) = (self.minefield[0].len() as f64, self.minefield.len() as f64);
         let (window_x, window_y) = (self.window_xy[0], self.window_xy[1]);
         let (mouse_x, mouse_y) = (self.mouse_xy[0], self.mouse_xy[1]);
@@ -119,6 +127,18 @@ impl App {
         let (c, r) = ((mouse_x / size_x) as usize,
                       (mouse_y / size_y) as usize);
 
-        self.minefield[r][c].hidden = false;
+        (c, r)
+    }
+
+    pub fn handle_click(&mut self) {
+        let (c, r) = self.find_tile();
+
+        self.minefield[r][c].click();
+    }
+
+    pub fn handle_mark(&mut self) {
+        let (c, r) = self.find_tile();
+
+        self.minefield[r][c].mark();
     }
 }

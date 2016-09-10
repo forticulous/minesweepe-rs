@@ -10,5 +10,6 @@ Minesweeper in Rust
 ## Notes
 Tile colors at the moment:
 * grey - unclicked
+* yellow - marked tile
 * red - mine
 * white - safe tile

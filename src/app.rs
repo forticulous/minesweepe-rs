@@ -4,7 +4,9 @@ use opengl_graphics::GlGraphics;
 use opengl_graphics::glyph_cache::GlyphCache;
 use graphics::color::BLACK;
 use graphics::{clear, rectangle, text, Transformed};
+use rand::{thread_rng, Rng};
 use std::path::Path;
+use std::cmp;
 
 use tile::Tile;
 use tile_type::TileType;
@@ -27,9 +29,6 @@ impl App {
     }
 
     fn random_minefield() -> [[Tile; 5]; 5] {
-        use rand::{thread_rng, Rng};
-        use std::cmp;
-
         let mut rng = thread_rng();
         let num_mines = 5;
 
@@ -43,21 +42,24 @@ impl App {
             if minefield[r][c].tile_type == TileType::Blank { 
                 minefield[r][c].tile_type = TileType::Mine;
 
-                // update adjacent mine counts
-                let min_dr = r.checked_sub(1).unwrap_or(0);
-                for dr in min_dr..cmp::min(r + 2, max_r) {
-                    let min_dc = c.checked_sub(1).unwrap_or(0);
-                    for dc in min_dc..cmp::min(c + 2, max_c) {
-                        let near_tile = &mut minefield[dr][dc];
-                        near_tile.adjacent_mines += 1;
-                    }
-                }
+                App::update_adjacent_mine_count(&mut minefield, (r, c), (max_r, max_c));
 
                 mines_added += 1;
             }
         }
          
         minefield
+    }
+
+    fn update_adjacent_mine_count(minefield: &mut [[Tile; 5]; 5], (r, c): (usize, usize), (max_r, max_c): (usize, usize)) {
+        let min_dr = r.checked_sub(1).unwrap_or(0);
+        for dr in min_dr..cmp::min(r + 2, max_r) {
+            let min_dc = c.checked_sub(1).unwrap_or(0);
+            for dc in min_dc..cmp::min(c + 2, max_c) {
+                let near_tile = &mut minefield[dr][dc];
+                near_tile.adjacent_mines += 1;
+            }
+        }
     }
 
     pub fn render(&mut self, args: &RenderArgs) {

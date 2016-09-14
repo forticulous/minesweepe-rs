@@ -1,4 +1,4 @@
-use piston::input::{RenderArgs, Button, MouseButton};
+use piston::input::RenderArgs;
 use glfw_window::OpenGL;
 use opengl_graphics::GlGraphics;
 use opengl_graphics::glyph_cache::GlyphCache;
@@ -110,15 +110,6 @@ impl App {
         self.mouse_xy = *mouse_xy;
     }
 
-    pub fn press(&mut self, button: &Button) {
-        if *button == Button::Mouse(MouseButton::Left) {
-            self.handle_click();
-        }
-        if *button == Button::Mouse(MouseButton::Right) {
-            self.handle_mark();
-        }
-    }
-
     fn find_tile(&mut self) -> (usize, usize) {
         let (cols, rows) = (self.minefield[0].len() as f64, self.minefield.len() as f64);
         let (window_x, window_y) = (self.window_xy[0], self.window_xy[1]);
@@ -128,6 +119,10 @@ impl App {
                       (mouse_y / size_y) as usize);
 
         (c, r)
+    }
+
+    pub fn new_game(&mut self) {
+        self.minefield = App::random_minefield();
     }
 
     pub fn handle_click(&mut self) {

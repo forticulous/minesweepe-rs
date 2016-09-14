@@ -9,7 +9,7 @@ mod tile;
 mod tile_type;
 
 use piston::window::{Window, WindowSettings};
-use piston::input::{RenderEvent, MouseCursorEvent, PressEvent};
+use piston::input::{RenderEvent, MouseCursorEvent, PressEvent, Button, MouseButton, Key};
 use piston::event_loop::{Events, WindowEvents};
 use glfw_window::{GlfwWindow, OpenGL};
 
@@ -41,7 +41,12 @@ fn handle_window_events(window: &mut GlfwWindow, app: &mut app::App) {
             app.mouse_move(&mouse_xy);
         }
         if let Some(button) = event.press_args() {
-            app.press(&button);
+            match button {
+                Button::Mouse(MouseButton::Left) => app.handle_click(),
+                Button::Mouse(MouseButton::Right) => app.handle_mark(),
+                Button::Keyboard(Key::N) => app.new_game(),
+                _ => { }
+            }
         }
     }
 }

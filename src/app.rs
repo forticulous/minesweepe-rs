@@ -1,4 +1,4 @@
-use piston::input::RenderArgs;
+use viewport::Viewport;
 use glfw_window::OpenGL;
 use opengl_graphics::GlGraphics;
 use opengl_graphics::glyph_cache::GlyphCache;
@@ -14,7 +14,7 @@ use tile_type::TileType;
 pub struct App {
     gl: GlGraphics,
     mouse_xy: [f64; 2],
-    window_xy: [f64; 2],
+    viewport: Viewport,
     minefield: [[Tile; 5]; 5],
     mine_count: usize
 }
@@ -24,7 +24,7 @@ impl App {
         App { 
             gl: GlGraphics::new(opengl), 
             mouse_xy: [0.0; 2],
-            window_xy: [0.0; 2],
+            viewport: Viewport { rect: [0; 4], draw_size: [0; 2], window_size: [0; 2] },
             minefield: App::random_minefield(mine_count),
             mine_count: mine_count
         }
@@ -68,13 +68,13 @@ impl App {
         }
     }
 
-    pub fn render(&mut self, args: &RenderArgs) {
-        self.window_xy = [args.width as f64, args.height as f64];
+    pub fn render(&mut self, viewport: &Viewport) {
+        self.viewport = viewport.clone();
         let minefield = &self.minefield;
 
         let border: f64 = 2.0;
         let (cols, rows) = (minefield[0].len() as f64, minefield.len() as f64);
-        let (window_x, window_y) = (self.window_xy[0], self.window_xy[1]);
+        let (window_x, window_y) = (self.viewport.window_size[0] as f64, self.viewport.window_size[1] as f64);
         let (size_x, size_y) = ((window_x / cols) - (2.0 * border),
                                 (window_y / rows) - (2.0 * border));
 
@@ -82,7 +82,7 @@ impl App {
         let mut glyph_cache = GlyphCache::new(font_path)
             .expect("Failed to load font");
 
-        self.gl.draw(args.viewport(), |ctx, gl| {
+        self.gl.draw(*viewport, |ctx, gl| {
             clear(BLACK, gl);
 
             for (r, row) in minefield.iter().enumerate() {
@@ -112,7 +112,7 @@ impl App {
 
     fn find_tile(&mut self) -> (usize, usize) {
         let (cols, rows) = (self.minefield[0].len() as f64, self.minefield.len() as f64);
-        let (window_x, window_y) = (self.window_xy[0], self.window_xy[1]);
+        let (window_x, window_y) = (self.viewport.window_size[0] as f64, self.viewport.window_size[1] as f64);
         let (mouse_x, mouse_y) = (self.mouse_xy[0], self.mouse_xy[1]);
         let (size_x, size_y) = (window_x / cols, window_y / rows);
         let (c, r) = ((mouse_x / size_x) as usize,

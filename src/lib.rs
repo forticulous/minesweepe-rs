@@ -2,6 +2,7 @@ extern crate piston;
 extern crate glfw_window;
 extern crate graphics;
 extern crate opengl_graphics;
+extern crate viewport;
 extern crate rand;
 
 mod app;
@@ -35,7 +36,7 @@ fn handle_window_events(window: &mut GlfwWindow, app: &mut app::App) {
     let mut events: WindowEvents = window.events();
     while let Some(event) = events.next(window) {
         if let Some(render_args) = event.render_args() {
-            app.render(&render_args);
+            app.render(&render_args.viewport());
         }
         if let Some(mouse_xy) = event.mouse_cursor_args() {
             app.mouse_move(&mouse_xy);

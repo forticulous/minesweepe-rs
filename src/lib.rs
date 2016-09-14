@@ -24,7 +24,7 @@ pub fn sweep_mines() {
         .build()
         .expect("Failed to create GLFW window.");
 
-    let mut app = app::App::new(opengl);
+    let mut app = app::App::new(opengl, 5);
 
     while !window.should_close() {
         handle_window_events(&mut window, &mut app);

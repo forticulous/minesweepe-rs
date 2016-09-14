@@ -15,22 +15,23 @@ pub struct App {
     gl: GlGraphics,
     mouse_xy: [f64; 2],
     window_xy: [f64; 2],
-    minefield: [[Tile; 5]; 5]
+    minefield: [[Tile; 5]; 5],
+    mine_count: usize
 }
 
 impl App {
-    pub fn new(opengl: OpenGL) -> App {
+    pub fn new(opengl: OpenGL, mine_count: usize) -> App {
         App { 
             gl: GlGraphics::new(opengl), 
             mouse_xy: [0.0; 2],
             window_xy: [0.0; 2],
-            minefield: App::random_minefield()
+            minefield: App::random_minefield(mine_count),
+            mine_count: mine_count
         }
     }
 
-    fn random_minefield() -> [[Tile; 5]; 5] {
+    fn random_minefield(mine_count: usize) -> [[Tile; 5]; 5] {
         let mut rng = thread_rng();
-        let num_mines = 5;
 
         let mut minefield = [[Tile { 
             tile_type: TileType::Blank, 
@@ -40,7 +41,7 @@ impl App {
         }; 5]; 5];
         let (max_r, max_c) = (minefield.len(), minefield[0].len());
         let mut mines_added = 0;
-        while mines_added < num_mines {
+        while mines_added < mine_count {
             let (r, c) = (rng.gen_range(0, max_r),
                           rng.gen_range(0, max_c));
 
@@ -68,7 +69,6 @@ impl App {
     }
 
     pub fn render(&mut self, args: &RenderArgs) {
-
         self.window_xy = [args.width as f64, args.height as f64];
         let minefield = &self.minefield;
 
@@ -122,7 +122,7 @@ impl App {
     }
 
     pub fn new_game(&mut self) {
-        self.minefield = App::random_minefield();
+        self.minefield = App::random_minefield(self.mine_count);
     }
 
     pub fn handle_click(&mut self) {

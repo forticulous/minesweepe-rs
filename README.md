@@ -7,9 +7,18 @@ Minesweeper in Rust
 * GLFW 3
 * OpenGL
 
-## Notes
-Tile colors at the moment:
-* grey - unclicked
-* yellow - marked tile
-* red - mine
-* white - safe tile
+## Controls
+Button                 | Action
+---------------------- | ------------
+<kbd>Left Click</kbd>  | Uncover tile
+<kbd>Right Click</kbd> | Mark tile as suspected mine
+<kbd>N</kbd>           | New game
+<kbd>Esc</kbd>         | Quit
+
+## Tile colors
+Color  | Meaning
+------ | -----------
+Grey   | Unclicked
+Yellow | Marked tile
+Red    | Mine
+White  | Safe tile

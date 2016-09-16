@@ -114,7 +114,7 @@ impl App {
     }
 
     fn find_tile(&mut self) -> (usize, usize) {
-        let (cols, rows) = (self.minefield.num_rows as f64, self.minefield.num_cols as f64);
+        let (cols, rows) = (self.minefield.num_cols as f64, self.minefield.num_rows as f64);
         let (window_x, window_y) = (self.viewport.window_size[0] as f64, self.viewport.window_size[1] as f64);
         let (mouse_x, mouse_y) = (self.mouse_xy[0], self.mouse_xy[1]);
         let (size_x, size_y) = (window_x / cols, window_y / rows);

@@ -2,7 +2,7 @@ use graphics::types::Color;
 
 use tile_type::TileType;
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub struct Tile {
     pub tile_type: TileType,
     pub hidden: bool,

@@ -6,6 +6,7 @@ extern crate viewport;
 extern crate rand;
 
 mod app;
+mod minefield;
 mod tile;
 mod tile_type;
 
@@ -25,7 +26,7 @@ pub fn sweep_mines() {
         .build()
         .expect("Failed to create GLFW window.");
 
-    let mut app = app::App::new(opengl, 5);
+    let mut app = app::App::new(opengl, 5, 5, 5);
 
     while !window.should_close() {
         handle_window_events(&mut window, &mut app);

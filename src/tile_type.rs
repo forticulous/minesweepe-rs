@@ -1,7 +1,7 @@
 use graphics::color::WHITE;
 use graphics::types::Color;
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum TileType {
     Mine,
     Blank
